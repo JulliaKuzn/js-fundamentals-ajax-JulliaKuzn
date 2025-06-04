@@ -1,7 +1,24 @@
-// Завдання: отримання даних про користувачів 
-// За допомогою засобі Fetch отримати інформацію про користувачів
-// за посиланням - https://jsonplaceholder.typicode.com/users 
-// Імена користувачів відобразити в ненумерованому списку ul.usersList,
-// який створений у файлі index.html
-// Запустити програму за допомогою Live Server
-// Перевірити за допомогою команди npm tests/task1.test.js 
+async function getUsers() {
+    const url = "https://jsonplaceholder.typicode.com/users";
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+}
+
+function showUsers(users) {
+    const usersContainer = document.querySelector(".usersList");
+    users.forEach((user) => {
+        const userElement = document.createElement("li");
+        usersContainer.appendChild(userElement);
+        userElement.textContent = user.name;
+    });
+
+}
+
+getUsers()
+    .then((usersList) => {
+        showUsers(usersList);
+    })
+    .catch((error) => {
+        console.error("Error during fetch users", error);
+    });
