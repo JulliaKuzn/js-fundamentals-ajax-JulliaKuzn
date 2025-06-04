@@ -1,7 +1,30 @@
-// На сторінці index.html знаходяться поля зазначені коментарем Task2
-// При введені імені користувача в поле #userNameInput та натиску на кнопку
-// #getUserButton потрібно зробити запит Fetch за посиланням - https://jsonplaceholder.typicode.com/users
-// Віднайти користувача із введеним ім'ям, отримати місто його проживанння та
-// відобразити у тезі #userCity
-// Запустити програму потрібно за допомогою Live Server
-// Перевірити правильність програми - команда node tests/task2.test.js
+async function getUsers() {
+    const url = "https://jsonplaceholder.typicode.com/users";
+    const users = await fetch(url);
+    const data = await users.json();
+    return data;
+}
+
+function showCity(userName, users) {
+    const correctUser = users.find((user) => {
+        return user.name === userName;
+    });
+    const city = correctUser.address.city ? correctUser.address.city : "Not Found";
+    const cityElement = document.getElementById("userCity");
+    cityElement.innerHTML = city;
+}
+
+function getUserCity() {
+    const nameInput = document.getElementById("userNameInput");
+    const userNameValue = nameInput.value;
+    getUsers()
+        .then((data) => {
+            showCity(userNameValue, data);
+        });
+
+    nameInput.value = "";
+}
+
+
+const getUsrBtn = document.getElementById("getUserButton");
+getUsrBtn.addEventListener("click", getUserCity);
